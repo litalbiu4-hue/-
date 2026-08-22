@@ -448,6 +448,13 @@ body.practice-active .practice-menu{position:sticky;top:0;z-index:60}
 #resetProgressBtn{position:fixed;left:18px;bottom:18px;z-index:9999;border:1px solid #173f68;border-radius:10px;background:#fff;color:#173f68;padding:9px 13px;font-weight:800;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.12)}
 #resetProgressBtn:hover{background:#eef5fa}
 </style>
+
+<style id="lesson03ChooserStyle">
+.topic-chooser-note{margin-bottom:12px;padding:10px 14px;border:1px solid #c7d8e3;border-radius:10px;background:#f1f7fb;font-weight:700}
+.lesson-group{margin-top:14px;padding:12px;border:1px solid #c7d8e3;border-radius:12px;background:#fff}
+.lesson-group-early{border:2px solid #2f6f95;background:#f7fbfe}
+.lesson-group-title{font-weight:800;color:#183b56;font-size:18px;margin:0 0 10px;text-align:right}
+</style>
 </head><body>
 <header><h1>מאגר הכנה לבחינת יישומי בינה מלאכותית בניהול — גרסת מיזוג מלאה</h1>
 <p>1,105 שאלות · 14 מקורות/נושאים · 3 סימולציות ×180 · חוברת משולבת · 39 עמודים · חיפוש חי + מפת איתור תרחישים · מקרא תואם בעברית ובאנגלית</p>
@@ -1143,7 +1150,7 @@ const TOPICS=["sc","l01","l03","l04","l05","l06","l07","l08","l09","l10","l11"];
 const LABELS={
 sc:"שרשרת האספקה — מאגר קיים",
 l01:"L01 – מבוא AI ווקטורים",
-l03:"L03 – Terminal / Codex CLI",
+l03:"שיעור 3 — L03 – Terminal / Codex CLI",
 l04:"L04 – כלכלת AI ואסטרטגיה",
 l05:"L05 – Python ו-Vibe Coding",
 l06:"L06 – שרשרת אספקה: תאוריה",
@@ -1220,9 +1227,19 @@ function renderMenu(){
 function renderTopicChooser(){
  const el=document.getElementById("topicChooser");if(!el)return;
  el.classList.remove("hidden");
- el.innerHTML='<b>בחירת נושא — כל לחיצה מציגה רק את השאלות של הנושא:</b><div class="topic-grid">'+
- TOPICS.map(t=>'<button type="button" class="topic-btn '+(state.mode==="topic"&&state.topic===t?"active":"alt")+'" onclick="startTopic(\''+t+'\')">'+esc(LABELS[t])+' · '+DATA[t].length+' שאלות</button>').join('')+
- '</div>';
+ const firstTopics=["l01","l03"];
+ const restTopics=TOPICS.filter(t=>!firstTopics.includes(t));
+ const topicButton=t=>'<button type="button" class="topic-btn '+(state.mode==="topic"&&state.topic===t?"active":"alt")+'" onclick="startTopic(\''+t+'\')">'+esc(LABELS[t])+' · '+DATA[t].length+' שאלות</button>';
+ el.innerHTML=
+   '<div class="topic-chooser-note"><b>בחירת נושא</b> — כל לחיצה מציגה רק את שאלות הנושא.</div>'+
+   '<div class="lesson-group lesson-group-early">'+
+      '<div class="lesson-group-title">שיעורי הבסיס</div>'+
+      '<div class="topic-grid">'+firstTopics.map(topicButton).join('')+'</div>'+
+   '</div>'+
+   '<div class="lesson-group">'+
+      '<div class="lesson-group-title">שיעורים 4–11</div>'+
+      '<div class="topic-grid">'+restTopics.map(topicButton).join('')+'</div>'+
+   '</div>';
 }
 window.renderTopicChooser=renderTopicChooser;
 
